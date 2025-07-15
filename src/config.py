@@ -22,7 +22,7 @@ APP_DESCRIPTION = "Upload an image to perform segmentation using Roboflow and de
 PAGE_ICON = "🔬"
 
 # Workflow Settings
-CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.4"))
+CONFIDENCE_THRESHOLD = 0.2
 USE_CACHE = os.getenv("USE_CACHE", "True").lower() == "true"
 
 # UI Settings for sliders (if needed)
