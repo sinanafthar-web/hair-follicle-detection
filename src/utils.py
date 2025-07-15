@@ -676,3 +676,85 @@ def generate_hair_analysis_pdf(report: dict, image_info: dict = None) -> bytes:
     buffer.close()
     
     return pdf_data 
+
+
+def crop_black_borders(image, threshold: int = 10) -> np.ndarray:
+    """
+    Remove rows and columns that are almost fully black from an image.
+    
+    Args:
+        image: Input image as numpy array (BGR or RGB)
+        threshold: Threshold for what constitutes "almost black" (0-255)
+        
+    Returns:
+        Cropped image with black borders removed
+    """
+    try:
+        # Convert to grayscale for border detection
+        if len(image.shape) == 3:
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            gray = image.copy()
+        
+        # Find rows and columns that are not almost black
+        row_means = np.mean(gray, axis=1)  # Average across width
+        col_means = np.mean(gray, axis=0)  # Average across height
+        
+        # Find first and last non-black rows
+        non_black_rows = np.where(row_means > threshold)[0]
+        if len(non_black_rows) == 0:
+            # If entire image is black, return original
+            return image
+        
+        top_row = non_black_rows[0]
+        bottom_row = non_black_rows[-1]
+        
+        # Find first and last non-black columns
+        non_black_cols = np.where(col_means > threshold)[0]
+        if len(non_black_cols) == 0:
+            # If entire image is black, return original
+            return image
+        
+        left_col = non_black_cols[0]
+        right_col = non_black_cols[-1]
+        
+        # Crop the image
+        cropped = image[top_row:bottom_row+1, left_col:right_col+1]
+        
+        # Ensure we don't return an empty image
+        if cropped.shape[0] == 0 or cropped.shape[1] == 0:
+            return image
+            
+        print(f"Debug: Cropped image from {image.shape} to {cropped.shape}")
+        return cropped
+        
+    except Exception as e:
+        print(f"Debug: Error cropping black borders: {e}")
+        return image
+
+
+def crop_black_borders_pil(pil_image, threshold: int = 10):
+    """
+    Remove rows and columns that are almost fully black from a PIL Image.
+    
+    Args:
+        pil_image: PIL Image object
+        threshold: Threshold for what constitutes "almost black" (0-255)
+        
+    Returns:
+        Cropped PIL Image with black borders removed
+    """
+    try:
+        # Convert PIL to numpy array
+        image_array = np.array(pil_image)
+        
+        # Crop using opencv function
+        cropped_array = crop_black_borders(image_array, threshold)
+        
+        # Convert back to PIL Image
+        from PIL import Image
+        return Image.fromarray(cropped_array)
+        
+    except Exception as e:
+        print(f"Debug: Error cropping PIL image: {e}")
+        return pil_image 

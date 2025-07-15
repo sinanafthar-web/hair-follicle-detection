@@ -245,7 +245,7 @@ class ImageProcessor:
             raise ValueError(f"Could not load image from {image_path}")
         
         # Run workflow
-        detections = self.run_workflow(image_path, workspace_name, workflow_id, confidence, use_cache)
+        detections = self.run_workflow(image_path, workspace_name, workflow_id)
         
         # Process detections
         processed_image, analysis_results = self.process_detections(image, detections)

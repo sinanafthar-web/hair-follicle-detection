@@ -7,6 +7,7 @@ A modular Streamlit application that uses Roboflow workflows for image segmentat
 - 🔬 **Workflow-based Processing**: Uses Roboflow workflows for powerful image segmentation
 - 📐 **Triangle Detection**: Finds the smallest triangle that encloses each segmented object
 - ➡️ **Directional Analysis**: Calculates and displays arrows from the shortest triangle side to the apex
+- ✂️ **Auto-Cropping**: Automatically removes black borders and empty areas from uploaded images
 - 🎨 **Visual Overlay**: Draws triangles, arrows, and reference points on the processed image
 - 📊 **Analysis Results**: Provides detailed statistics about detected objects
 - 🔒 **Secure Configuration**: Environment-based configuration using `.env` files
@@ -36,6 +37,7 @@ ROBOFLOW_WORKSPACE=your_workspace_name
 ROBOFLOW_WORKFLOW_ID=your_workflow_id
 CONFIDENCE_THRESHOLD=0.4
 USE_CACHE=True
+BLACK_BORDER_THRESHOLD=10
 ```
 
 ## Setup
@@ -72,6 +74,7 @@ ROBOFLOW_WORKSPACE=your_workspace_name
 ROBOFLOW_WORKFLOW_ID=your_workflow_id
 CONFIDENCE_THRESHOLD=0.4
 USE_CACHE=True
+BLACK_BORDER_THRESHOLD=10
 ```
 
 ### Step 2: Run the Application
@@ -199,7 +202,17 @@ ROBOFLOW_WORKFLOW_ID=small-object-detection-sahi
 # Processing Configuration
 CONFIDENCE_THRESHOLD=0.4
 USE_CACHE=True
+BLACK_BORDER_THRESHOLD=10
 ```
+
+### Configuration Options
+
+- **`ROBOFLOW_API_KEY`**: Your Roboflow API key from account settings
+- **`ROBOFLOW_WORKSPACE`**: Your workspace name (e.g., `ranaudio`)
+- **`ROBOFLOW_WORKFLOW_ID`**: Your workflow identifier (e.g., `small-object-detection-sahi`)
+- **`CONFIDENCE_THRESHOLD`**: Minimum confidence for detections (0.0-1.0, default: 0.4)
+- **`USE_CACHE`**: Cache workflow definitions for faster processing (True/False, default: True)
+- **`BLACK_BORDER_THRESHOLD`**: Threshold for automatic black border removal (0-255, default: 10)
 
 ## Dependencies
 

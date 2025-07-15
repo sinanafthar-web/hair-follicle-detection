@@ -44,6 +44,8 @@ def display_configuration():
         st.subheader("Processing Settings")
         st.text(f"Confidence: {CONFIDENCE_THRESHOLD}")
         st.text(f"Use Cache: {USE_CACHE}")
+        from src import BLACK_BORDER_THRESHOLD
+        st.text(f"Black Border Threshold: {BLACK_BORDER_THRESHOLD}")
         
         st.markdown("---")
         st.caption("To modify configuration, edit your `.env` file and restart the app.")
@@ -54,8 +56,13 @@ def display_configuration():
 def process_uploaded_image(uploaded_file):
     """Process the uploaded image with the configured parameters from environment."""
     
-    # Load and display original image
-    image = Image.open(uploaded_file)
+    # Load original image
+    original_image = Image.open(uploaded_file)
+    
+    # Crop black borders from the image
+    from src import crop_black_borders_pil, BLACK_BORDER_THRESHOLD
+    image = crop_black_borders_pil(original_image, BLACK_BORDER_THRESHOLD)
+    
     image_array = np.array(image)
     
     # Convert to BGR for OpenCV processing
@@ -66,6 +73,8 @@ def process_uploaded_image(uploaded_file):
     
     with col1:
         st.subheader("Original Image")
+        if image.size != original_image.size:
+            st.info(f"🔄 Auto-cropped black borders: {original_image.size} → {image.size}")
         st.image(image, use_container_width=True)
         
         # Show image info
