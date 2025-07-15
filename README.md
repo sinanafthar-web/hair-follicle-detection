@@ -8,6 +8,7 @@ A modular Streamlit application that uses Roboflow workflows for image segmentat
 - 📐 **Triangle Detection**: Finds the smallest triangle that encloses each segmented object
 - ➡️ **Directional Analysis**: Calculates and displays arrows from the shortest triangle side to the apex
 - ✂️ **Auto-Cropping**: Automatically removes black borders and empty areas from uploaded images
+- 🖼️ **Demo Images**: Quick testing with pre-loaded sample images from `demo_images/` folder
 - 🎨 **Visual Overlay**: Draws triangles, arrows, and reference points on the processed image
 - 📊 **Analysis Results**: Provides detailed statistics about detected objects
 - 🔒 **Secure Configuration**: Environment-based configuration using `.env` files
@@ -84,12 +85,23 @@ Start the Streamlit app:
 streamlit run app.py
 ```
 
-### Step 3: Upload and Process
-1. Use the file uploader to select an image
-2. Supported formats: PNG, JPG, JPEG, BMP, TIFF
-3. Click the "Process Image" button
-4. Wait for the analysis to complete
-5. View the results in the processed image panel
+### Step 3: Select and Process an Image
+
+**Option A: Upload Your Own Image**
+1. Go to the "📁 Upload Image" tab
+2. Use the file uploader to select an image
+3. Supported formats: PNG, JPG, JPEG, BMP, TIFF
+
+**Option B: Use Demo Images**
+1. Go to the "🖼️ Demo Images" tab
+2. Select a sample image from the dropdown
+3. Add your own demo images to the `demo_images/` folder
+
+**Processing:**
+1. Click the "🚀 Process Image" button
+2. Wait for the analysis to complete
+3. View the results in the processed image panel
+4. Download the PDF report if needed
 
 The sidebar will display your current configuration loaded from the `.env` file.
 
@@ -180,6 +192,8 @@ hair-follicle-app/
 │   ├── image_processor.py  # Image processing and inference
 │   ├── triangle_detector.py# Triangle detection algorithms
 │   └── utils.py           # Utility functions
+├── demo_images/           # Demo images for quick testing
+│   └── README.md          # Demo images documentation
 ├── .env                   # Environment variables (create this file)
 ├── .env.example          # Environment variables template
 ├── .gitignore            # Git ignore rules

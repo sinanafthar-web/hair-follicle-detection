@@ -758,3 +758,53 @@ def crop_black_borders_pil(pil_image, threshold: int = 10):
     except Exception as e:
         print(f"Debug: Error cropping PIL image: {e}")
         return pil_image 
+
+
+def get_demo_images() -> list:
+    """
+    Get list of demo images from the demo_images folder.
+    
+    Returns:
+        List of demo image filenames
+    """
+    import os
+    from .config import SUPPORTED_IMAGE_FORMATS
+    
+    demo_folder = "demo_images"
+    demo_images = []
+    
+    if os.path.exists(demo_folder):
+        for file in os.listdir(demo_folder):
+            # Check if file has a supported image extension
+            file_ext = file.lower().split('.')[-1]
+            if file_ext in [fmt.lower() for fmt in SUPPORTED_IMAGE_FORMATS]:
+                demo_images.append(file)
+    
+    return sorted(demo_images)
+
+
+def load_demo_image(filename: str):
+    """
+    Load a demo image from the demo_images folder.
+    
+    Args:
+        filename: Name of the demo image file
+        
+    Returns:
+        PIL Image object or None if file not found
+    """
+    import os
+    from PIL import Image
+    
+    demo_folder = "demo_images"
+    image_path = os.path.join(demo_folder, filename)
+    
+    try:
+        if os.path.exists(image_path):
+            return Image.open(image_path)
+        else:
+            print(f"Demo image not found: {image_path}")
+            return None
+    except Exception as e:
+        print(f"Error loading demo image {filename}: {e}")
+        return None 

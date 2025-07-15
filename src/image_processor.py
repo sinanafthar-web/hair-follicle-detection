@@ -100,22 +100,20 @@ class ImageProcessor:
                             if isinstance(pred, dict):
                                 confidence = pred.get("confidence", 0.0)
                                 
-                                # Filter by confidence threshold
-                                if confidence >= confidence_threshold:
-                                    detection = {
-                                        'points': pred.get("points", []),
-                                        'confidence': confidence,
-                                        'class': pred.get("class", "unknown"),
-                                        'class_id': pred.get("class_id", 0),
-                                        'detection_id': pred.get("detection_id", ""),
-                                        'bbox': {
-                                            'x': pred.get("x", 0),
-                                            'y': pred.get("y", 0),
-                                            'width': pred.get("width", 0),
-                                            'height': pred.get("height", 0)
-                                        }
+                                detection = {
+                                    'points': pred.get("points", []),
+                                    'confidence': confidence,
+                                    'class': pred.get("class", "unknown"),
+                                    'class_id': pred.get("class_id", 0),
+                                    'detection_id': pred.get("detection_id", ""),
+                                    'bbox': {
+                                        'x': pred.get("x", 0),
+                                        'y': pred.get("y", 0),
+                                        'width': pred.get("width", 0),
+                                        'height': pred.get("height", 0)
                                     }
-                                    detections.append(detection)
+                                }
+                                detections.append(detection)
             
             print(f"Debug: Extracted {len(detections)} detections above confidence {confidence_threshold}")
             return detections
@@ -245,7 +243,7 @@ class ImageProcessor:
             raise ValueError(f"Could not load image from {image_path}")
         
         # Run workflow
-        detections = self.run_workflow(image_path, workspace_name, workflow_id)
+        detections = self.run_workflow(image_path, workspace_name, workflow_id, use_cache=False)
         
         # Process detections
         processed_image, analysis_results = self.process_detections(image, detections)

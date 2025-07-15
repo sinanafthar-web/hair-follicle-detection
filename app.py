@@ -42,7 +42,6 @@ def display_configuration():
         st.text(f"API Key: {'*' * 8}...{ROBOFLOW_API_KEY[-4:] if len(ROBOFLOW_API_KEY) > 4 else '****'}")
         
         st.subheader("Processing Settings")
-        st.text(f"Confidence: {CONFIDENCE_THRESHOLD}")
         st.text(f"Use Cache: {USE_CACHE}")
         from src import BLACK_BORDER_THRESHOLD
         st.text(f"Black Border Threshold: {BLACK_BORDER_THRESHOLD}")
@@ -59,6 +58,20 @@ def process_uploaded_image(uploaded_file):
     # Load original image
     original_image = Image.open(uploaded_file)
     
+    # Process the image
+    _process_image(original_image, f"Uploaded: {uploaded_file.name}")
+
+
+def process_demo_image(demo_image, demo_filename):
+    """Process a demo image with the configured parameters from environment."""
+    
+    # Process the demo image
+    _process_image(demo_image, f"Demo: {demo_filename}")
+
+
+def _process_image(original_image, image_source):
+    """Common image processing logic for both uploaded and demo images."""
+    
     # Crop black borders from the image
     from src import crop_black_borders_pil, BLACK_BORDER_THRESHOLD
     image = crop_black_borders_pil(original_image, BLACK_BORDER_THRESHOLD)
@@ -73,6 +86,7 @@ def process_uploaded_image(uploaded_file):
     
     with col1:
         st.subheader("Original Image")
+        st.caption(image_source)
         if image.size != original_image.size:
             st.info(f"🔄 Auto-cropped black borders: {original_image.size} → {image.size}")
         st.image(image, use_container_width=True)
@@ -134,7 +148,8 @@ def process_uploaded_image(uploaded_file):
                     'detections': detections,
                     'analysis_results': analysis_results,
                     'image_info': img_info,
-                    'processed_image': processed_image_rgb
+                    'processed_image': processed_image_rgb,
+                    'image_source': image_source
                 }
                 
                 # Display processed image
@@ -414,28 +429,74 @@ def main():
     # Display configuration in sidebar
     display_configuration()
     
-    # File upload
-    uploaded_file = st.file_uploader(
-        "📁 Choose an image file", 
-        type=SUPPORTED_IMAGE_FORMATS,
-        help="Upload an image for hair follicle analysis"
-    )
+    # Image selection options
+    st.subheader("📸 Choose an Image")
     
-    # Clear session state if a new file is uploaded
-    if uploaded_file is not None:
-        # Check if this is a different file than what we processed before
-        current_file_id = f"{uploaded_file.name}_{uploaded_file.size}"
-        if 'last_file_id' not in st.session_state or st.session_state.last_file_id != current_file_id:
-            # Clear previous analysis data for new file
-            if 'analysis_data' in st.session_state:
-                del st.session_state.analysis_data
-            st.session_state.last_file_id = current_file_id
+    # Create tabs for upload vs demo images
+    upload_tab, demo_tab = st.tabs(["📁 Upload Image", "🖼️ Demo Images"])
     
-    # Process uploaded image
+    uploaded_file = None
+    demo_image = None
+    
+    with upload_tab:
+        uploaded_file = st.file_uploader(
+            "Choose an image file", 
+            type=SUPPORTED_IMAGE_FORMATS,
+            help="Upload your own image for hair follicle analysis"
+        )
+    
+    with demo_tab:
+        from src import get_demo_images, load_demo_image
+        demo_images = get_demo_images()
+        
+        if demo_images:
+            selected_demo = st.selectbox(
+                "Select a demo image:",
+                options=[""] + demo_images,
+                format_func=lambda x: "Choose a demo image..." if x == "" else x
+            )
+            
+            if selected_demo:
+                demo_image = load_demo_image(selected_demo)
+                if demo_image:
+                    # Preview the demo image
+                    st.image(demo_image, caption=f"Preview: {selected_demo}", use_container_width=True)
+                else:
+                    st.error(f"❌ Failed to load demo image: {selected_demo}")
+        else:
+            st.info("📂 No demo images found in the `demo_images` folder.")
+            st.markdown("""
+            **To add demo images:**
+            1. Create a `demo_images` folder in the project root
+            2. Add image files (PNG, JPG, JPEG, BMP, TIFF)
+            3. Restart the app to see them here
+            """)
+    
+    # Clear session state if a new file is uploaded or demo image is selected
+    current_image = None
+    current_file_id = None
+    
     if uploaded_file is not None:
-        process_uploaded_image(uploaded_file)
+        current_image = uploaded_file
+        current_file_id = f"upload_{uploaded_file.name}_{uploaded_file.size}"
+    elif demo_image is not None and selected_demo:
+        current_image = demo_image
+        current_file_id = f"demo_{selected_demo}"
+    
+    if current_file_id and ('last_file_id' not in st.session_state or st.session_state.last_file_id != current_file_id):
+        # Clear previous analysis data for new file
+        if 'analysis_data' in st.session_state:
+            del st.session_state.analysis_data
+        st.session_state.last_file_id = current_file_id
+    
+    # Process selected image (uploaded or demo)
+    if current_image is not None:
+        if uploaded_file is not None:
+            process_uploaded_image(uploaded_file)
+        else:
+            process_demo_image(demo_image, selected_demo)
     else:
-        st.info("👆 Please upload an image to get started.")
+        st.info("👆 Please upload an image or select a demo image to get started.")
     
 
 

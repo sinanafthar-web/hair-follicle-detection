@@ -14,7 +14,7 @@ DEFAULT_API_URL = "https://serverless.roboflow.com"
 # Load configuration from environment variables
 ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY", "1SxAyEbpaNdwrNSbmDon")
 ROBOFLOW_WORKSPACE = os.getenv("ROBOFLOW_WORKSPACE", "ranaudio")
-ROBOFLOW_WORKFLOW_ID = os.getenv("ROBOFLOW_WORKFLOW_ID", "small-object-detection-sahi-3")
+ROBOFLOW_WORKFLOW_ID = "small-object-detection-sahi-3"
 
 # UI Configuration
 APP_TITLE = "🔬 Hair Follicle Segmentation & Triangle Detection"
@@ -65,4 +65,4 @@ ARROW_TIP_LENGTH = 0.3
 MIN_CONTOUR_POINTS = 3
 
 # Image Preprocessing Settings
-BLACK_BORDER_THRESHOLD = int(os.getenv("BLACK_BORDER_THRESHOLD", "10"))  # Threshold for cropping black borders (0-255) 
+BLACK_BORDER_THRESHOLD = 20

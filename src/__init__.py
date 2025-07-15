@@ -18,7 +18,7 @@ from .utils import (
     draw_arrow, draw_triangle, draw_point, draw_contour, draw_visualization_elements, draw_arrow_with_color,
     convert_bgr_to_rgb, convert_rgb_to_bgr, format_confidence, validate_workspace_name, validate_workflow_id, get_image_info,
     get_hair_strand_class_name, generate_hair_analysis_report, generate_hair_analysis_pdf,
-    crop_black_borders, crop_black_borders_pil
+    crop_black_borders, crop_black_borders_pil, get_demo_images, load_demo_image
 )
 
 __version__ = "2.0.0"
