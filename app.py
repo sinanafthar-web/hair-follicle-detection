@@ -143,21 +143,7 @@ def process_uploaded_image(uploaded_file):
     else:
         with col2:
             st.info("👆 Click the 'Process Image' button to analyze the image.")
-    
-    # Display analysis results if they exist (either from current processing or session state)
-    if 'analysis_data' in st.session_state:
-        analysis_data = st.session_state.analysis_data
-        
-        # Always show processed image from session state when available
-        with col2:
-            st.subheader("Processed Image")
-            st.image(analysis_data['processed_image'], use_container_width=True)
-        
-        render_analysis_results(
-            analysis_data['detections'], 
-            analysis_data['analysis_results'], 
-            analysis_data['image_info']
-        )
+
 
 
 def render_analysis_results(detections, analysis_results, image_info=None):
