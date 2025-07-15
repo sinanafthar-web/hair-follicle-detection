@@ -43,6 +43,17 @@ COLORS = {
     'contour': (255, 255, 0),    # Cyan
 }
 
+# Hair Strand Class Colors (BGR format for OpenCV)
+HAIR_STRAND_COLORS = {
+    1: (0, 255, 0),      # Green for strong
+    2: (0, 255, 255),    # Yellow for medium  
+    3: (0, 0, 255),      # Red for weak
+    'strong': (0, 255, 0),    # Green
+    'medium': (0, 255, 255),  # Yellow
+    'weak': (0, 0, 255),      # Red
+    'default': (0, 255, 0),   # Default to green
+}
+
 # Drawing Settings
 TRIANGLE_THICKNESS = 2
 ARROW_THICKNESS = 3

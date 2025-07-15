@@ -10,7 +10,7 @@ from inference_sdk import InferenceHTTPClient
 
 from .config import DEFAULT_API_URL, TEMP_IMAGE_PATH, MIN_CONTOUR_POINTS
 from .triangle_detector import get_smallest_triangle, find_shortest_side_and_apex
-from .utils import draw_arrow, draw_visualization_elements
+from .utils import draw_arrow, draw_visualization_elements, get_hair_strand_class_name
 
 
 class ImageProcessor:
@@ -181,9 +181,19 @@ class ImageProcessor:
                     middle_point, apex = find_shortest_side_and_apex(triangle)
                     
                     if middle_point is not None and apex is not None:
+                        # Prepare class information for visualization
+                        class_info = {
+                            'class_id': detection.get('class_id', 0),
+                            'class_name': get_hair_strand_class_name(
+                                detection.get('class_id', 0), 
+                                detection.get('class', 'unknown')
+                            ),
+                            'confidence': detection.get('confidence', 0.0)
+                        }
+                        
                         # Draw visualization elements
                         processed_image = draw_visualization_elements(
-                            processed_image, triangle, middle_point, apex, contour
+                            processed_image, triangle, middle_point, apex, contour, class_info
                         )
                         
                         # Store analysis results
