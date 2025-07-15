@@ -1,0 +1,8 @@
+streamlit
+inference-sdk
+supervision
+opencv-python
+numpy
+Pillow
+matplotlib
+python-dotenv
