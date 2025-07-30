@@ -255,44 +255,31 @@ def get_image_info(image: np.ndarray) -> dict:
     } 
 
 
-def get_hair_strand_class_name(class_id: int, class_name: str = None) -> str:
+def get_hair_strand_class_name(class_name: str) -> str:
     """
-    Map class ID to hair strand strength name.
+    Extract hair strand strength name from class name.
     
     Args:
-        class_id: Class ID from detection (1, 2, 3)
-        class_name: Original class name from detection
+        class_name: Class name from detection (e.g., "weak_follicle", "medium_follicle", "strong_follicle")
         
     Returns:
-        Human-readable hair strand strength name
+        Human-readable hair strand strength name (strong, medium, weak)
     """
-    # Map class IDs to hair strand strength
-    class_mapping = {
-        1: "strong",
-        2: "medium", 
-        3: "weak"
-    }
+    if not class_name:
+        return "unknown"
     
-    # If we have a class name that already contains the strength, use it
-    if class_name:
-        class_lower = class_name.lower()
-        if "strong" in class_lower:
-            return "strong"
-        elif "medium" in class_lower:
-            return "medium"
-        elif "weak" in class_lower:
-            return "weak"
-        elif "follicle" in class_lower:
-            # Handle cases like "strong_follicle" 
-            if "strong" in class_lower:
-                return "strong"
-            elif "medium" in class_lower:
-                return "medium"
-            elif "weak" in class_lower:
-                return "weak"
+    class_lower = class_name.lower()
     
-    # Fall back to class ID mapping
-    return class_mapping.get(class_id, f"class_{class_id}") 
+    # Extract strength from follicle class names
+    if "strong" in class_lower:
+        return "strong"
+    elif "medium" in class_lower:
+        return "medium"
+    elif "weak" in class_lower:
+        return "weak"
+    
+    # Default fallback
+    return "unknown" 
 
 
 def generate_hair_analysis_report(detections: list, analysis_results: list, image_info: dict = None) -> dict:
@@ -325,11 +312,10 @@ def generate_hair_analysis_report(detections: list, analysis_results: list, imag
         confidence_values.append(confidence)
         
         # Determine class
-        class_id = detection.get('class_id', 0)
         class_name = detection.get('class', '')
         
         # Map to hair strand type
-        hair_class = get_hair_strand_class_name(class_id, class_name)
+        hair_class = get_hair_strand_class_name(class_name)
         
         if hair_class in class_counts:
             class_counts[hair_class] += 1

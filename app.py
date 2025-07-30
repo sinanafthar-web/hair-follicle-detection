@@ -400,7 +400,7 @@ def render_analysis_results(detections, analysis_results, image_info=None):
             with col2:
                 if 'class' in result:
                     from src import get_hair_strand_class_name
-                    class_name = get_hair_strand_class_name(result.get('class_id', 0), result.get('class', 'unknown'))
+                    class_name = get_hair_strand_class_name(result.get('class', 'unknown'))
                     
                     # Show color indicator for hair strand type
                     color_indicator = {

@@ -104,7 +104,6 @@ class ImageProcessor:
                                     'points': pred.get("points", []),
                                     'confidence': confidence,
                                     'class': pred.get("class", "unknown"),
-                                    'class_id': pred.get("class_id", 0),
                                     'detection_id': pred.get("detection_id", ""),
                                     'bbox': {
                                         'x': pred.get("x", 0),
@@ -181,11 +180,7 @@ class ImageProcessor:
                     if middle_point is not None and apex is not None:
                         # Prepare class information for visualization
                         class_info = {
-                            'class_id': detection.get('class_id', 0),
-                            'class_name': get_hair_strand_class_name(
-                                detection.get('class_id', 0), 
-                                detection.get('class', 'unknown')
-                            ),
+                            'class_name': get_hair_strand_class_name(detection.get('class', 'unknown')),
                             'confidence': detection.get('confidence', 0.0)
                         }
                         
@@ -204,7 +199,6 @@ class ImageProcessor:
                             'contour_points': len(contour_points),
                             'confidence': detection.get('confidence', 0.0),
                             'class': detection.get('class', 'unknown'),
-                            'class_id': detection.get('class_id', 0),
                             'bbox': detection.get('bbox', {})
                         }
                         
