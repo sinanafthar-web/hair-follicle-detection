@@ -16,7 +16,7 @@ ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY", "1SxAyEbpaNdwrNSbmDon")
 ROBOFLOW_WORKSPACE = os.getenv("ROBOFLOW_WORKSPACE", "ranaudio")
 ROBOFLOW_WORKFLOW_ID = "small-object-detection-sahi-5"
 
-# UI Configuration
+# UI Configuratio
 APP_TITLE = "🔬 Hair Follicle Segmentation & Triangle Detection"
 APP_DESCRIPTION = "Upload an image to perform segmentation using Roboflow and detect triangular patterns."
 PAGE_ICON = "🔬"
