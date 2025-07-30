@@ -14,7 +14,7 @@ DEFAULT_API_URL = "https://serverless.roboflow.com"
 # Load configuration from environment variables
 ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY", "1SxAyEbpaNdwrNSbmDon")
 ROBOFLOW_WORKSPACE = os.getenv("ROBOFLOW_WORKSPACE", "ranaudio")
-ROBOFLOW_WORKFLOW_ID = "small-object-detection-sahi-3"
+ROBOFLOW_WORKFLOW_ID = "small-object-detection-sahi-5"
 
 # UI Configuration
 APP_TITLE = "🔬 Hair Follicle Segmentation & Triangle Detection"
@@ -22,7 +22,7 @@ APP_DESCRIPTION = "Upload an image to perform segmentation using Roboflow and de
 PAGE_ICON = "🔬"
 
 # Workflow Settings
-CONFIDENCE_THRESHOLD = 0.3
+CONFIDENCE_THRESHOLD = 0.2
 USE_CACHE = False
 
 # UI Settings for sliders (if needed)
