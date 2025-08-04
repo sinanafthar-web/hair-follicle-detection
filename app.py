@@ -20,6 +20,43 @@ from src import (
     convert_rgb_to_bgr, convert_bgr_to_rgb, format_confidence, validate_workspace_name, validate_workflow_id, get_image_info
 )
 
+# Authentication credentials
+ADMIN_USERNAME = "segwitzAdmin"
+ADMIN_PASSWORD = "segwitz312"
+
+
+def check_authentication():
+    """Check if user is authenticated using session state."""
+    return st.session_state.get('authenticated', False)
+
+
+def login_form():
+    """Display login form and handle authentication."""
+    st.title("🔒 Hair Follicle Analysis - Login")
+    st.markdown("Please enter your credentials to access the application.")
+    
+    with st.form("login_form"):
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        submit_button = st.form_submit_button("Login")
+        
+        if submit_button:
+            if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+                st.session_state.authenticated = True
+                st.success("✅ Login successful! Redirecting...")
+                st.rerun()
+            else:
+                st.error("❌ Invalid username or password. Please try again.")
+
+
+def logout_button():
+    """Display logout button in sidebar."""
+    with st.sidebar:
+        st.markdown("---")
+        if st.button("🚪 Logout", type="secondary"):
+            st.session_state.authenticated = False
+            st.rerun()
+
 
 def setup_page():
     """Configure Streamlit page settings."""
@@ -418,16 +455,17 @@ def render_analysis_results(detections, analysis_results, image_info=None):
             st.divider()
 
 
-def main():
-    """Main application function."""
-    setup_page()
-    
+def main_app_content():
+    """Main application content - only shown when authenticated."""
     # Header
     st.title(APP_TITLE)
     st.markdown(APP_DESCRIPTION)
     
     # Display configuration in sidebar
     display_configuration()
+    
+    # Add logout button in sidebar
+    logout_button()
     
     # Image selection options
     st.subheader("📸 Choose an Image")
@@ -497,6 +535,17 @@ def main():
             process_demo_image(demo_image, selected_demo)
     else:
         st.info("👆 Please upload an image or select a demo image to get started.")
+
+
+def main():
+    """Main application function with authentication check."""
+    setup_page()
+    
+    # Check authentication
+    if not check_authentication():
+        login_form()
+    else:
+        main_app_content()
     
 
 
